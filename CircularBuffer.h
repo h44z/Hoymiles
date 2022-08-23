@@ -22,6 +22,7 @@
 #define __CircularBuffer_H__
 
 #include <cstdint>
+#include <Arduino.h>
 
 template <class BUFFERTYPE, uint8_t BUFFERSIZE>
 class CircularBuffer {
