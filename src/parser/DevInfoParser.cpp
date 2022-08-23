@@ -1,4 +1,5 @@
 #include "DevInfoParser.h"
+#include "../logging.h"
 #include <cstring>
 
 void DevInfoParser::clearBufferAll()

@@ -1,4 +1,5 @@
 #include "StatisticsParser.h"
+#include "../logging.h"
 
 void StatisticsParser::setByteAssignment(const hm_byteAssign_t* byteAssignment, const uint8_t count)
 {

@@ -22,13 +22,5 @@
         {
             "name": "RF24"
         }
-    ],
-    "build": {
-        "libArchive": false,
-        "flags": [
-            "-Icommands",
-            "-Iparser",
-            "-Iinverters"
-        ]
-    }
+    ]
 }
