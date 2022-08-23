@@ -1,6 +1,7 @@
 #include "CommandAbstract.h"
 #include "../crc.h"
 #include <string.h>
+#include <Arduino.h>
 
 CommandAbstract::CommandAbstract(uint64_t target_address, uint64_t router_address)
 {
@@ -27,7 +28,7 @@ const uint8_t* CommandAbstract::getDataPayload()
 
 void CommandAbstract::dumpDataPayload()
 {
-    if (SERIAL_LOG_LEVEL == LOG_VERBOSE) {
+    if (HM_SERIAL_LOG_LEVEL == HM_LOG_VERBOSE) {
         const uint8_t* payload = getDataPayload();
         for (uint8_t i = 0; i < getDataSize(); i++) {
             Serial.print(payload[i], HEX);
