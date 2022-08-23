@@ -18,35 +18,36 @@ void HoymilesClass::init()
 void HoymilesClass::loop()
 {
     _radio->loop();
-    yield();
 
     if (getNumInverters() > 0) {
-        if (millis() - _lastPoll > (_pollInterval * 1000)) {
-            static uint8_t inverterPos = 0;
+        return;
+    }
 
-            std::shared_ptr<InverterAbstract> iv = getInverterByPos(inverterPos);
-            if (iv != nullptr && _radio->isIdle()) {
-                PDBG(F("Fetch inverter: "));
-                PDBGLN(iv->serial(), HEX);
+    if (millis() - _lastPoll > (_pollInterval * 1000)) {
+        static uint8_t inverterPos = 0;
 
-                iv->sendStatsRequest(_radio.get());
+        std::shared_ptr<InverterAbstract> inv = getInverterByPos(inverterPos);
+        if (inv != nullptr && _radio->isIdle()) {
+            PDBG(F("Fetch inverter: "));
+            PDBGLN(inv->serial(), HEX);
 
-                // Fetch event log
-                iv->sendAlarmLogRequest(_radio.get());
+            inv->sendStatsRequest(_radio.get());
 
-                // Fetch dev info (but first fetch stats)
-                if (iv->Statistics()->getLastUpdate() > 0 && (iv->DevInfo()->getLastUpdateAll() == 0 || iv->DevInfo()->getLastUpdateSample() == 0)) {
-                    PDBGLN(F("Request device info"));
-                    iv->sendDevInfoRequest(_radio.get());
-                }
+            // Fetch event log
+            inv->sendAlarmLogRequest(_radio.get());
+
+            // Fetch dev info (but first fetch stats)
+            if (inv->Statistics()->getLastUpdate() > 0 && (inv->DevInfo()->getLastUpdateAll() == 0 || inv->DevInfo()->getLastUpdateSample() == 0)) {
+                PDBGLN(F("Request device info"));
+                inv->sendDevInfoRequest(_radio.get());
             }
-
-            if (++inverterPos >= getNumInverters()) {
-                inverterPos = 0;
-            }
-
-            _lastPoll = millis();
         }
+
+        if (++inverterPos >= getNumInverters()) {
+            inverterPos = 0;
+        }
+
+        _lastPoll = millis();
     }
 }
 

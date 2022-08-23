@@ -21,6 +21,8 @@
 #ifndef __CircularBuffer_H__
 #define __CircularBuffer_H__
 
+#include <cstdint>
+
 template <class BUFFERTYPE, uint8_t BUFFERSIZE>
 class CircularBuffer {
 

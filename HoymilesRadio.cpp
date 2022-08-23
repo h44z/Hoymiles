@@ -301,7 +301,7 @@ void HoymilesRadio::sendCommandFragment(CommandAbstract* cmd, uint8_t fragment_i
 
 void HoymilesRadio::dumpBuf(const char* info, uint8_t buf[], uint8_t len)
 {
-    if (SERIAL_LOG_LEVEL == LOG_VERBOSE) {
+    if (HM_SERIAL_LOG_LEVEL == HM_LOG_VERBOSE) {
         if (NULL != info)
             Serial.print(String(info));
 
