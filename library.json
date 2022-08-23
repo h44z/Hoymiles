@@ -1,0 +1,26 @@
+{
+    "name": "Hoymiles",
+    "keywords": "solar, inverter, gateway",
+    "description": "Hoymiles solar inverter DTU library",
+    "license": "GPL-2.0-only",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/h44z/Hoymiles.git"
+    },
+    "version": "0.0.1",
+    "export": {
+        "exclude": [
+            "examples/*",
+            ".github/*"
+        ]
+    },
+    "frameworks": "arduino",
+    "platforms": [
+        "espressif8266"
+    ],
+    "dependencies": [
+        {
+            "name": "RF24"
+        }
+    ]
+}
