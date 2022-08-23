@@ -1,4 +1,5 @@
 #include "AlarmLogParser.h"
+#include "../logging.h"
 #include <cstring>
 
 void AlarmLogParser::clearBuffer()
