@@ -1,8 +1,8 @@
 #ifndef __CommandAbstract_H__
 #define __CommandAbstract_H__
 
-#include "types.h"
-#include "logging.h"
+#include "../types.h"
+#include "../logging.h"
 #include <Stream.h>
 #include <cstdint>
 

@@ -1,5 +1,5 @@
 #include "DevInfoAllCommand.h"
-#include "inverters/InverterAbstract.h"
+#include "../inverters/InverterAbstract.h"
 
 DevInfoAllCommand::DevInfoAllCommand(uint64_t target_address, uint64_t router_address, time_t time)
     : MultiDataCommand(target_address, router_address)

@@ -1,9 +1,9 @@
 #include "HM_Abstract.h"
-#include "HoymilesRadio.h"
-#include "commands/AlarmDataCommand.h"
-#include "commands/DevInfoAllCommand.h"
-#include "commands/DevInfoSampleCommand.h"
-#include "commands/RealTimeRunDataCommand.h"
+#include "../HoymilesRadio.h"
+#include "../commands/AlarmDataCommand.h"
+#include "../commands/DevInfoAllCommand.h"
+#include "../commands/DevInfoSampleCommand.h"
+#include "../commands/RealTimeRunDataCommand.h"
 
 HM_Abstract::HM_Abstract(uint64_t serial)
     : InverterAbstract(serial) {};

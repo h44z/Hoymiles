@@ -1,5 +1,5 @@
 #include "InverterAbstract.h"
-#include "crc.h"
+#include "../crc.h"
 #include <cstring>
 
 InverterAbstract::InverterAbstract(uint64_t serial)

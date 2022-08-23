@@ -4,8 +4,8 @@
 #include "../parser/AlarmLogParser.h"
 #include "../parser/StatisticsParser.h"
 #include "../parser/DevInfoParser.h"
-#include "HoymilesRadio.h"
-#include "types.h"
+#include "../HoymilesRadio.h"
+#include "../types.h"
 #include <Arduino.h>
 #include <cstdint>
 

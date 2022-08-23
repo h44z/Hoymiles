@@ -1,5 +1,5 @@
 #include "MultiDataCommand.h"
-#include "crc.h"
+#include "../crc.h"
 
 MultiDataCommand::MultiDataCommand(uint64_t target_address, uint64_t router_address, uint8_t data_type, time_t time)
     : CommandAbstract(target_address, router_address)

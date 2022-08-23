@@ -1,5 +1,5 @@
 #include "CommandAbstract.h"
-#include "crc.h"
+#include "../crc.h"
 #include <string.h>
 
 CommandAbstract::CommandAbstract(uint64_t target_address, uint64_t router_address)

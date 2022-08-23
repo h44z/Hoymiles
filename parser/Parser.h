@@ -1,7 +1,6 @@
 #ifndef __Parser_H__
 #define __Parser_H__
 
-#include "logging.h"
 #include <cstdint>
 
 class Parser {

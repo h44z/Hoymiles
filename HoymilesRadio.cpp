@@ -1,5 +1,4 @@
 #include "HoymilesRadio.h"
-#include "Hoymiles.h"
 #include "commands/RequestFrameCommand.h"
 #include "crc.h"
 #include <every.h>
