@@ -20,7 +20,9 @@
     ],
     "dependencies": [
         {
-            "name": "nrf24/RF24"
+            "owner": "nrf24",
+            "name": "RF24",
+            "version": "^1.4.5"
         }
     ]
 }
