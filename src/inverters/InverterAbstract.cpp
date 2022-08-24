@@ -46,7 +46,7 @@ uint32_t InverterAbstract::lastResponse()
 
 void InverterAbstract::setLastResponse(uint32_t responseTime)
 {
-    if (responseTime != lastResponse) {
+    if (responseTime != _lastResponse) {
         _lastResponse = responseTime;
         _equalResponseCounter = 0;
     } else {
