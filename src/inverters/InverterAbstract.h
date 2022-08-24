@@ -57,8 +57,8 @@ private:
     uint8_t _rxFragmentMaxPacketId = 0;
     uint8_t _rxFragmentLastPacketId = 0;
     uint8_t _rxFragmentRetransmitCnt = 0;
-    uint32_t lastResponse = 0;
-    uint32_t equalResponseCounter = 0;
+    uint32_t _lastResponse = 0;
+    uint32_t _equalResponseCounter = 0;
 
     std::unique_ptr<AlarmLogParser> _alarmLogParser;
     std::unique_ptr<DevInfoParser> _devInfoParser;

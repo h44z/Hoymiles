@@ -41,26 +41,26 @@ const char* InverterAbstract::name()
 
 uint32_t InverterAbstract::lastResponse()
 {
-    return lastResponse;
+    return _lastResponse;
 }
 
 void InverterAbstract::setLastResponse(uint32_t responseTime)
 {
     if (responseTime != lastResponse) {
-        lastResponse = responseTime;
-        equalResponseCounter = 0;
+        _lastResponse = responseTime;
+        _equalResponseCounter = 0;
     } else {
-        equalResponseCounter++;
+        _equalResponseCounter++;
     }
 }
 
 bool InverterAbstract::online()
 {
-    if (lastResponse == 0) {
+    if (_lastResponse == 0) {
         return false; // missing initial response
     }
 
-    if (equalResponseCounter > HM_OFFLINE_TRESHOLD) {
+    if (_equalResponseCounter > HM_OFFLINE_TRESHOLD) {
         return false; // no change detected, inverter is offline
     }
 
