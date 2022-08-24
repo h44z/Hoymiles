@@ -20,7 +20,7 @@
     ],
     "dependencies": [
         {
-            "name": "RF24"
+            "name": "nrf24/RF24"
         }
     ]
 }
