@@ -19,7 +19,7 @@ void HoymilesClass::loop()
 {
     _radio->loop();
 
-    if (getNumInverters() > 0) {
+    if (getNumInverters() == 0) {
         return;
     }
 
