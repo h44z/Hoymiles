@@ -23,6 +23,8 @@ bool DevInfoSampleCommand::handleResponse(InverterAbstract* inverter, hm_fragmen
         inverter->DevInfo()->appendFragmentSample(offs, fragment[i].fragment, fragment[i].len);
         offs += (fragment[i].len);
     }
-    inverter->DevInfo()->setLastUpdateSample(millis());
+    auto now = millis();
+    inverter->DevInfo()->setLastUpdateSample(now);
+    inverter->setLastResponse(now);
     return true;
 }

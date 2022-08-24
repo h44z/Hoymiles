@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #define HM_MAX_NAME_LENGTH 32
+#define HM_OFFLINE_TRESHOLD 16
 
 enum {
     HM_FRAGMENT_ALL_MISSING = 255,
@@ -30,6 +31,9 @@ public:
     uint64_t serial();
     void setName(const char* name);
     const char* name();
+    void setLastResponse(uint32_t responseTime);
+    uint32_t lastResponse();
+    bool online();
     virtual String typeName() = 0;
     virtual const hm_byteAssign_t* getByteAssignment() = 0;
     virtual const uint8_t getAssignmentCount() = 0;
@@ -53,6 +57,8 @@ private:
     uint8_t _rxFragmentMaxPacketId = 0;
     uint8_t _rxFragmentLastPacketId = 0;
     uint8_t _rxFragmentRetransmitCnt = 0;
+    uint32_t lastResponse = 0;
+    uint32_t equalResponseCounter = 0;
 
     std::unique_ptr<AlarmLogParser> _alarmLogParser;
     std::unique_ptr<DevInfoParser> _devInfoParser;

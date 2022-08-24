@@ -23,6 +23,8 @@ bool AlarmDataCommand::handleResponse(InverterAbstract* inverter, hm_fragment_t 
         inverter->EventLog()->appendFragment(offs, fragment[i].fragment, fragment[i].len);
         offs += (fragment[i].len);
     }
-    inverter->EventLog()->setLastUpdate(millis());
+    auto now = millis();
+    inverter->EventLog()->setLastUpdate(now);
+    inverter->setLastResponse(now);
     return true;
 }

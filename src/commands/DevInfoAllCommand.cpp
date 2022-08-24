@@ -23,6 +23,8 @@ bool DevInfoAllCommand::handleResponse(InverterAbstract* inverter, hm_fragment_t
         inverter->DevInfo()->appendFragmentAll(offs, fragment[i].fragment, fragment[i].len);
         offs += (fragment[i].len);
     }
-    inverter->DevInfo()->setLastUpdateAll(millis());
+    auto now = millis();
+    inverter->DevInfo()->setLastUpdateAll(now);
+    inverter->setLastResponse(now);
     return true;
 }

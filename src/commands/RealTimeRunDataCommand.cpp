@@ -23,6 +23,8 @@ bool RealTimeRunDataCommand::handleResponse(InverterAbstract* inverter, hm_fragm
         inverter->Statistics()->appendFragment(offs, fragment[i].fragment, fragment[i].len);
         offs += (fragment[i].len);
     }
-    inverter->Statistics()->setLastUpdate(millis());
+    auto now = millis();
+    inverter->Statistics()->setLastUpdate(now);
+    inverter->setLastResponse(now);
     return true;
 }

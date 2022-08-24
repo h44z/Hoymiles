@@ -39,6 +39,34 @@ const char* InverterAbstract::name()
     return _name;
 }
 
+uint32_t InverterAbstract::lastResponse()
+{
+    return lastResponse;
+}
+
+void InverterAbstract::setLastResponse(uint32_t responseTime)
+{
+    if (responseTime != lastResponse) {
+        lastResponse = responseTime;
+        equalResponseCounter = 0;
+    } else {
+        equalResponseCounter++;
+    }
+}
+
+bool InverterAbstract::online()
+{
+    if (lastResponse == 0) {
+        return false; // missing initial response
+    }
+
+    if (equalResponseCounter > HM_OFFLINE_TRESHOLD) {
+        return false; // no change detected, inverter is offline
+    }
+
+    return true;
+}
+
 AlarmLogParser* InverterAbstract::EventLog()
 {
     return _alarmLogParser.get();
