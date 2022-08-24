@@ -120,6 +120,16 @@ void HoymilesClass::removeInverterByPos(uint8_t pos)
     }
 }
 
+void HoymilesClass::removeInverterBySerial(uint64_t serial)
+{
+    for (uint8_t i = 0; i < _inverters.size(); i++) {
+        if (_inverters[i]->serial() == serial) {
+            _inverters.erase(_inverters.begin() + i);
+            return;
+        }
+    }
+}
+
 size_t HoymilesClass::getNumInverters()
 {
     return _inverters.size();

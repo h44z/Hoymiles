@@ -74,27 +74,12 @@ typedef struct {
 
 // prototypes
 class StatisticsParser;
-float calcYieldTotalCh0(StatisticsParser* iv, uint8_t arg0);
-float calcYieldDayCh0(StatisticsParser* iv, uint8_t arg0);
-float calcUdcCh(StatisticsParser* iv, uint8_t arg0);
-float calcPowerDcCh0(StatisticsParser* iv, uint8_t arg0);
-float calcEffiencyCh0(StatisticsParser* iv, uint8_t arg0);
-float calcIrradiation(StatisticsParser* iv, uint8_t arg0);
 
 using hm_func_t = float(StatisticsParser*, uint8_t);
 
 struct hm_calcFunc_t {
     uint8_t funcId; // unique id
     hm_func_t* func; // function pointer
-};
-
-const hm_calcFunc_t hm_calcFunctions[] = {
-    { HM_CALC_YT_CH0, &calcYieldTotalCh0 },
-    { HM_CALC_YD_CH0, &calcYieldDayCh0 },
-    { HM_CALC_UDC_CH, &calcUdcCh },
-    { HM_CALC_PDC_CH0, &calcPowerDcCh0 },
-    { HM_CALC_EFF_CH0, &calcEffiencyCh0 },
-    { HM_CALC_IRR_CH, &calcIrradiation }
 };
 
 class StatisticsParser : public Parser {

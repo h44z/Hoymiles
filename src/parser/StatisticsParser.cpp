@@ -1,6 +1,23 @@
 #include "StatisticsParser.h"
 #include "../logging.h"
 
+// static prototypes
+static float calcYieldTotalCh0(StatisticsParser* iv, uint8_t arg0);
+static float calcYieldDayCh0(StatisticsParser* iv, uint8_t arg0);
+static float calcUdcCh(StatisticsParser* iv, uint8_t arg0);
+static float calcPowerDcCh0(StatisticsParser* iv, uint8_t arg0);
+static float calcEffiencyCh0(StatisticsParser* iv, uint8_t arg0);
+static float calcIrradiation(StatisticsParser* iv, uint8_t arg0);
+
+const hm_calcFunc_t hm_calcFunctions[] = {
+    { HM_CALC_YT_CH0, &calcYieldTotalCh0 },
+    { HM_CALC_YD_CH0, &calcYieldDayCh0 },
+    { HM_CALC_UDC_CH, &calcUdcCh },
+    { HM_CALC_PDC_CH0, &calcPowerDcCh0 },
+    { HM_CALC_EFF_CH0, &calcEffiencyCh0 },
+    { HM_CALC_IRR_CH, &calcIrradiation }
+};
+
 void StatisticsParser::setByteAssignment(const hm_byteAssign_t* byteAssignment, const uint8_t count)
 {
     _byteAssignment = byteAssignment;
@@ -113,7 +130,7 @@ void StatisticsParser::setChannelMaxPower(uint8_t channel, uint16_t power)
     }
 }
 
-float calcYieldTotalCh0(StatisticsParser* iv, uint8_t arg0)
+static float calcYieldTotalCh0(StatisticsParser* iv, uint8_t arg0)
 {
     float yield = 0;
     for (uint8_t i = 1; i <= iv->getChannelCount(); i++) {
@@ -122,7 +139,7 @@ float calcYieldTotalCh0(StatisticsParser* iv, uint8_t arg0)
     return yield;
 }
 
-float calcYieldDayCh0(StatisticsParser* iv, uint8_t arg0)
+static float calcYieldDayCh0(StatisticsParser* iv, uint8_t arg0)
 {
     float yield = 0;
     for (uint8_t i = 1; i <= iv->getChannelCount(); i++) {
@@ -132,12 +149,12 @@ float calcYieldDayCh0(StatisticsParser* iv, uint8_t arg0)
 }
 
 // arg0 = channel of source
-float calcUdcCh(StatisticsParser* iv, uint8_t arg0)
+static float calcUdcCh(StatisticsParser* iv, uint8_t arg0)
 {
     return iv->getChannelFieldValue(arg0, HM_FLD_UDC);
 }
 
-float calcPowerDcCh0(StatisticsParser* iv, uint8_t arg0)
+static float calcPowerDcCh0(StatisticsParser* iv, uint8_t arg0)
 {
     float dcPower = 0;
     for (uint8_t i = 1; i <= iv->getChannelCount(); i++) {
@@ -147,7 +164,7 @@ float calcPowerDcCh0(StatisticsParser* iv, uint8_t arg0)
 }
 
 // arg0 = channel
-float calcEffiencyCh0(StatisticsParser* iv, uint8_t arg0)
+static float calcEffiencyCh0(StatisticsParser* iv, uint8_t arg0)
 {
     float acPower = iv->getChannelFieldValue(HM_CH0, HM_FLD_PAC);
     float dcPower = 0;
@@ -162,7 +179,7 @@ float calcEffiencyCh0(StatisticsParser* iv, uint8_t arg0)
 }
 
 // arg0 = channel
-float calcIrradiation(StatisticsParser* iv, uint8_t arg0)
+static float calcIrradiation(StatisticsParser* iv, uint8_t arg0)
 {
     if (NULL != iv) {
         if (iv->getChannelMaxPower(arg0 - 1) > 0)
