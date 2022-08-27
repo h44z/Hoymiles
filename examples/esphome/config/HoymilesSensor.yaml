@@ -1,0 +1,106 @@
+esphome:
+  name: hoymiles
+  includes:
+    - HoymilesSensor.h
+  libraries:
+    - "SPI"
+    - "https://github.com/h44z/Hoymiles.git"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "the_ssid"
+  password: "the_wpa_key"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Hoymiles Fallback Hotspot"
+    password: "fallback_wpa_key"
+
+captive_portal:
+
+# define the DTU instance, here we define one with id 'hoymilesDTU'
+custom_component:
+  - id: hoymilesDTU
+    lambda: |-
+      std::vector<inverterConfig> inverters = {
+        { .serial = 0x112112345678, .name = "HM-300", .strings = {385} }
+        //,{ .serial = 0x112198765432, .name = "HM-301", .strings = {385, 400} }
+      };
+      auto hm_dtu = new HoymilesDTU(inverters);
+      return {hm_dtu};
+    
+# define inverter sensors
+sensor:
+- platform: custom
+  lambda: |-
+    return {hm_sensor(hoymilesDTU, 0, 0, HM_FLD_PDC), // component id, inverter index (see config order), inverter output channel (0 = AC, 1 = first DC channel), inverter field
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_PAC),
+            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_UDC),
+            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_IDC),
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_UAC),
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_IAC),
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_F),
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_T),
+            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_EFF),
+            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_IRR)}; 
+
+  sensors:
+    - name: "DC Power Input"
+      unit_of_measurement: W
+      device_class: power
+      accuracy_decimals: 2
+    - name: "AC Power Output"
+      unit_of_measurement: W
+      device_class: power
+      accuracy_decimals: 2
+    - name: "DC Voltage on Panel 1"
+      unit_of_measurement: V
+      device_class: voltage
+      accuracy_decimals: 2
+    - name: "DC Current on Panel 1"
+      unit_of_measurement: A
+      device_class: current
+      accuracy_decimals: 2
+    - name: "AC Voltage Output"
+      unit_of_measurement: V
+      device_class: voltage
+      accuracy_decimals: 2
+    - name: "AC Current Output"
+      unit_of_measurement: A
+      device_class: current
+      accuracy_decimals: 2
+    - name: "Frequency Output"
+      unit_of_measurement: Hz
+      device_class: frequency
+      accuracy_decimals: 2
+    - name: "Temperature Output"
+      unit_of_measurement: °C
+      device_class: temperature
+      accuracy_decimals: 2
+    - name: "Efficiency Output"
+      unit_of_measurement: "%"
+      accuracy_decimals: 2
+    - name: "Irradiation on Panel 1"
+      unit_of_measurement: "%"
+      accuracy_decimals: 2
+
+# define binary inverter sensors
+binary_sensor:
+- platform: custom
+  lambda: |-
+    return {hm_status_sensor(hoymilesDTU, 0)};
+
+  binary_sensors:
+    - name: "Producing"
