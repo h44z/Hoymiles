@@ -25,6 +25,5 @@ bool DevInfoSampleCommand::handleResponse(InverterAbstract* inverter, hm_fragmen
     }
     auto now = millis();
     inverter->DevInfo()->setLastUpdateSample(now);
-    inverter->setLastResponse(now);
     return true;
 }

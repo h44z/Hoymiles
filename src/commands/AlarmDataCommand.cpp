@@ -25,6 +25,5 @@ bool AlarmDataCommand::handleResponse(InverterAbstract* inverter, hm_fragment_t 
     }
     auto now = millis();
     inverter->EventLog()->setLastUpdate(now);
-    inverter->setLastResponse(now);
     return true;
 }

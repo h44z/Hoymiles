@@ -16,6 +16,7 @@ bool HM_Abstract::sendStatsRequest(HoymilesRadio* radio)
     RealTimeRunDataCommand* cmd = radio->enqueCommand<RealTimeRunDataCommand>();
     cmd->setTime(now);
     cmd->setTargetAddress(serial());
+    this->setLastRequest(now);
 
     return true;
 }

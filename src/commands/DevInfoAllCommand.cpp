@@ -25,6 +25,5 @@ bool DevInfoAllCommand::handleResponse(InverterAbstract* inverter, hm_fragment_t
     }
     auto now = millis();
     inverter->DevInfo()->setLastUpdateAll(now);
-    inverter->setLastResponse(now);
     return true;
 }

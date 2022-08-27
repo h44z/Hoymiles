@@ -46,22 +46,27 @@ uint32_t InverterAbstract::lastResponse()
 
 void InverterAbstract::setLastResponse(uint32_t responseTime)
 {
-    if (responseTime != _lastResponse) {
-        _lastResponse = responseTime;
-        _equalResponseCounter = 0;
-    } else {
-        _equalResponseCounter++;
-    }
+    _lastResponse = responseTime;
+}
+
+uint32_t InverterAbstract::lastRequest()
+{
+    return _lastRequest;
+}
+
+void InverterAbstract::setLastRequest(uint32_t requestTime)
+{
+    _lastRequest = requestTime;
 }
 
 bool InverterAbstract::online()
 {
-    if (_lastResponse == 0) {
+    if (_lastResponse == 0 || _lastRequest == 0) {
         return false; // missing initial response
     }
 
-    if (_equalResponseCounter > HM_OFFLINE_TRESHOLD) {
-        return false; // no change detected, inverter is offline
+    if ((_lastResponse - _lastRequest) > HM_OFFLINE_TRESHOLD) {
+        return false; // no response in time detected, inverter is offline
     }
 
     return true;

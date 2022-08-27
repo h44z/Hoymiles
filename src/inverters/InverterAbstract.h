@@ -10,7 +10,7 @@
 #include <cstdint>
 
 #define HM_MAX_NAME_LENGTH 32
-#define HM_OFFLINE_TRESHOLD 16
+#define HM_OFFLINE_TRESHOLD 1000 // milliseconds
 
 enum {
     HM_FRAGMENT_ALL_MISSING = 255,
@@ -33,6 +33,8 @@ public:
     const char* name();
     void setLastResponse(uint32_t responseTime);
     uint32_t lastResponse();
+    void setLastRequest(uint32_t requestTime);
+    uint32_t lastRequest();
     bool online();
     virtual String typeName() = 0;
     virtual const hm_byteAssign_t* getByteAssignment() = 0;
@@ -58,7 +60,7 @@ private:
     uint8_t _rxFragmentLastPacketId = 0;
     uint8_t _rxFragmentRetransmitCnt = 0;
     uint32_t _lastResponse = 0;
-    uint32_t _equalResponseCounter = 0;
+    uint32_t _lastRequest = 0;
 
     std::unique_ptr<AlarmLogParser> _alarmLogParser;
     std::unique_ptr<DevInfoParser> _devInfoParser;
