@@ -129,7 +129,7 @@ class HoymilesDTU : public Component {
       ESP_LOGD("hoymiles", "Last request %d, last response %d, last stats %d", inv->lastRequest(), inv->lastResponse(), inv->Statistics()->getLastUpdate());
       Serial.println(inv->lastRequest());
 
-      auto is_online = true;// inv->online();
+      auto is_online = inv->online();
 
       HoymilesStatusSensor *bs = this->_binary_sensors[this->_currentInverterIndex];
       if (bs != NULL) {
