@@ -5,54 +5,57 @@
 #include "../commands/DevInfoSampleCommand.h"
 #include "../commands/RealTimeRunDataCommand.h"
 
-HM_Abstract::HM_Abstract(uint64_t serial)
-    : InverterAbstract(serial) {};
-
-bool HM_Abstract::sendStatsRequest(HoymilesRadio* radio)
+namespace Hoymiles
 {
-    time_t now;
-    time(&now);
+    HM_Abstract::HM_Abstract(uint64_t serial)
+        : InverterAbstract(serial) {};
 
-    RealTimeRunDataCommand* cmd = radio->enqueCommand<RealTimeRunDataCommand>();
-    cmd->setTime(now);
-    cmd->setTargetAddress(serial());
-    this->setLastRequest(now);
+    bool HM_Abstract::sendStatsRequest(HoymilesRadio* radio)
+    {
+        time_t now;
+        time(&now);
 
-    return true;
-}
+        RealTimeRunDataCommand* cmd = radio->enqueCommand<RealTimeRunDataCommand>();
+        cmd->setTime(now);
+        cmd->setTargetAddress(serial());
+        this->setLastRequest(millis());
 
-bool HM_Abstract::sendAlarmLogRequest(HoymilesRadio* radio)
-{
-    if (Statistics()->hasChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG)) {
-        if ((uint8_t)Statistics()->getChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG) == _lastAlarmLogCnt) {
-            return false;
-        }
+        return true;
     }
 
-    _lastAlarmLogCnt = (uint8_t)Statistics()->getChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG);
+    bool HM_Abstract::sendAlarmLogRequest(HoymilesRadio* radio)
+    {
+        if (Statistics()->hasChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG)) {
+            if ((uint8_t)Statistics()->getChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG) == _lastAlarmLogCnt) {
+                return false;
+            }
+        }
 
-    time_t now;
-    time(&now);
+        _lastAlarmLogCnt = (uint8_t)Statistics()->getChannelFieldValue(HM_CH0, HM_FLD_EVT_LOG);
 
-    AlarmDataCommand* cmd = radio->enqueCommand<AlarmDataCommand>();
-    cmd->setTime(now);
-    cmd->setTargetAddress(serial());
+        time_t now;
+        time(&now);
 
-    return true;
-}
+        AlarmDataCommand* cmd = radio->enqueCommand<AlarmDataCommand>();
+        cmd->setTime(now);
+        cmd->setTargetAddress(serial());
 
-bool HM_Abstract::sendDevInfoRequest(HoymilesRadio* radio)
-{
-    time_t now;
-    time(&now);
+        return true;
+    }
 
-    DevInfoAllCommand* cmdAll = radio->enqueCommand<DevInfoAllCommand>();
-    cmdAll->setTime(now);
-    cmdAll->setTargetAddress(serial());
+    bool HM_Abstract::sendDevInfoRequest(HoymilesRadio* radio)
+    {
+        time_t now;
+        time(&now);
 
-    DevInfoSampleCommand* cmdSample = radio->enqueCommand<DevInfoSampleCommand>();
-    cmdSample->setTime(now);
-    cmdSample->setTargetAddress(serial());
+        DevInfoAllCommand* cmdAll = radio->enqueCommand<DevInfoAllCommand>();
+        cmdAll->setTime(now);
+        cmdAll->setTargetAddress(serial());
 
-    return true;
+        DevInfoSampleCommand* cmdSample = radio->enqueCommand<DevInfoSampleCommand>();
+        cmdSample->setTime(now);
+        cmdSample->setTargetAddress(serial());
+
+        return true;
+    }
 }

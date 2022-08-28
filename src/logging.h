@@ -1,6 +1,8 @@
 #ifndef __HM_logging_H__
 #define __HM_logging_H__
 
+namespace Hoymiles
+{
 //#define HM_LOG_SERIAL 1
 
 #ifdef HM_LOG_SERIAL
@@ -73,6 +75,6 @@
     #define PVERBF(...)
     #define PVERBLN(...)
 #endif
-
+}
 
 #endif // __HM_logging_H__

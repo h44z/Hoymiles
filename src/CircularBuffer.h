@@ -24,121 +24,126 @@
 #include <cstdint>
 #include <Arduino.h>
 
-template <class BUFFERTYPE, uint8_t BUFFERSIZE>
-class CircularBuffer {
+namespace Hoymiles
+{
 
-    typedef BUFFERTYPE BufferType;
-    BufferType Buffer[BUFFERSIZE];
+    template <class BUFFERTYPE, uint8_t BUFFERSIZE>
+    class CircularBuffer {
 
-    public:
-        CircularBuffer() : m_buff(Buffer) {
-            m_size = BUFFERSIZE;
-            clear();
-        }
+        typedef BUFFERTYPE BufferType;
+        BufferType Buffer[BUFFERSIZE];
 
-        /** Clear all entries in the circular buffer. */
-        void clear(void)
-        {
-            m_front = 0;
-            m_fill  = 0;
-        }
-
-        /** Test if the circular buffer is empty */
-        inline bool empty(void) const
-        {
-            return !m_fill;
-        }
-
-        /** Return the number of records stored in the buffer */
-        inline uint8_t available(void) const
-        {
-            return m_fill;
-        }
-
-        /** Test if the circular buffer is full */
-        inline bool full(void) const
-        {
-            return m_fill == m_size;
-        }
-
-        inline uint8_t getFill(void) const {
-            return m_fill;
-        }
-
-        /** Aquire record on front of the buffer, for writing.
-         * After filling the record, it has to be pushed to actually
-         * add it to the buffer.
-         * @return Pointer to record, or NULL when buffer is full.
-         */
-        BUFFERTYPE* getFront(void) const
-        {
-            BUFFERTYPE* f = NULL;
-            if (!full())
-                f = get(m_front);
-            return f;
-        }
-
-        /** Push record to front of the buffer
-         * @param record   Record to push. If record was aquired previously (using getFront) its
-         *                 data will not be copied as it is already present in the buffer.
-         * @return True, when record was pushed successfully.
-         */
-        bool pushFront(BUFFERTYPE* record)
-        {
-            bool ok = false;
-            if (!full())
-            {
-                BUFFERTYPE* f = get(m_front);
-                if (f != record)
-                    *f = *record;
-                m_front = (m_front+1) % m_size;
-                m_fill++;
-                ok = true;
+        public:
+            CircularBuffer() : m_buff(Buffer) {
+                m_size = BUFFERSIZE;
+                clear();
             }
-            return ok;
-        }
 
-        /** Aquire record on back of the buffer, for reading.
-         * After reading the record, it has to be pop'ed to actually
-         * remove it from the buffer.
-         * @return Pointer to record, or NULL when buffer is empty.
-         */
-        BUFFERTYPE* getBack(void) const
-        {
-            BUFFERTYPE* b = NULL;
-            if (!empty())
-                b = get(back());
-            return b;
-        }
-
-        /** Remove record from back of the buffer.
-         * @return True, when record was pop'ed successfully.
-         */
-        bool popBack(void)
-        {
-            bool ok = false;
-            if (!empty())
+            /** Clear all entries in the circular buffer. */
+            void clear(void)
             {
-                m_fill--;
-                ok = true;
+                m_front = 0;
+                m_fill  = 0;
             }
-            return ok;
-        }
 
-    protected:
-        inline BUFFERTYPE * get(const uint8_t idx) const
-        {
-            return &(m_buff[idx]);
-        }
-        inline uint8_t back(void) const
-        {
-            return (m_front - m_fill + m_size) % m_size;
-        }
+            /** Test if the circular buffer is empty */
+            inline bool empty(void) const
+            {
+                return !m_fill;
+            }
 
-        uint8_t          m_size;     // Total number of records that can be stored in the buffer.
-        BUFFERTYPE* const m_buff;
-        volatile uint8_t m_front;    // Index of front element (not pushed yet).
-        volatile uint8_t m_fill;     // Amount of records currently pushed.
-};
+            /** Return the number of records stored in the buffer */
+            inline uint8_t available(void) const
+            {
+                return m_fill;
+            }
+
+            /** Test if the circular buffer is full */
+            inline bool full(void) const
+            {
+                return m_fill == m_size;
+            }
+
+            inline uint8_t getFill(void) const {
+                return m_fill;
+            }
+
+            /** Aquire record on front of the buffer, for writing.
+             * After filling the record, it has to be pushed to actually
+             * add it to the buffer.
+             * @return Pointer to record, or NULL when buffer is full.
+             */
+            BUFFERTYPE* getFront(void) const
+            {
+                BUFFERTYPE* f = NULL;
+                if (!full())
+                    f = get(m_front);
+                return f;
+            }
+
+            /** Push record to front of the buffer
+             * @param record   Record to push. If record was aquired previously (using getFront) its
+             *                 data will not be copied as it is already present in the buffer.
+             * @return True, when record was pushed successfully.
+             */
+            bool pushFront(BUFFERTYPE* record)
+            {
+                bool ok = false;
+                if (!full())
+                {
+                    BUFFERTYPE* f = get(m_front);
+                    if (f != record)
+                        *f = *record;
+                    m_front = (m_front+1) % m_size;
+                    m_fill++;
+                    ok = true;
+                }
+                return ok;
+            }
+
+            /** Aquire record on back of the buffer, for reading.
+             * After reading the record, it has to be pop'ed to actually
+             * remove it from the buffer.
+             * @return Pointer to record, or NULL when buffer is empty.
+             */
+            BUFFERTYPE* getBack(void) const
+            {
+                BUFFERTYPE* b = NULL;
+                if (!empty())
+                    b = get(back());
+                return b;
+            }
+
+            /** Remove record from back of the buffer.
+             * @return True, when record was pop'ed successfully.
+             */
+            bool popBack(void)
+            {
+                bool ok = false;
+                if (!empty())
+                {
+                    m_fill--;
+                    ok = true;
+                }
+                return ok;
+            }
+
+        protected:
+            inline BUFFERTYPE * get(const uint8_t idx) const
+            {
+                return &(m_buff[idx]);
+            }
+            inline uint8_t back(void) const
+            {
+                return (m_front - m_fill + m_size) % m_size;
+            }
+
+            uint8_t          m_size;     // Total number of records that can be stored in the buffer.
+            BUFFERTYPE* const m_buff;
+            volatile uint8_t m_front;    // Index of front element (not pushed yet).
+            volatile uint8_t m_fill;     // Amount of records currently pushed.
+    };
+    
+}
 
 #endif // __CircularBuffer_H__

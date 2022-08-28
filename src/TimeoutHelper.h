@@ -3,16 +3,19 @@
 
 #include <stdint.h>
 
-class TimeoutHelper {
-public:
-    TimeoutHelper();
-    void set(uint32_t ms);
-    void extend(uint32_t ms);
-    bool occured();
+namespace Hoymiles
+{
+    class TimeoutHelper {
+    public:
+        TimeoutHelper();
+        void set(uint32_t ms);
+        void extend(uint32_t ms);
+        bool occured();
 
-private:
-    uint32_t startMillis;
-    uint32_t timeout;
-};
+    private:
+        uint32_t startMillis;
+        uint32_t timeout;
+    };
+}
 
 #endif // __TimeoutHelper_H__

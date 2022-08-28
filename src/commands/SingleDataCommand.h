@@ -3,9 +3,12 @@
 
 #include "CommandAbstract.h"
 
-class SingleDataCommand : public CommandAbstract {
-public:
-    SingleDataCommand(uint64_t target_address = 0, uint64_t router_address = 0);
-};
+namespace Hoymiles
+{
+    class SingleDataCommand : public CommandAbstract {
+    public:
+        SingleDataCommand(uint64_t target_address = 0, uint64_t router_address = 0);
+    };
+}
 
 #endif // __SingleDataCommand_H__

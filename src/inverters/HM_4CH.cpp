@@ -1,24 +1,27 @@
 #include "HM_4CH.h"
 
-HM_4CH::HM_4CH(uint64_t serial)
-    : HM_Abstract(serial) {};
-
-bool HM_4CH::isValidSerial(uint64_t serial)
+namespace Hoymiles
 {
-    return serial >= 0x116100000000 && serial <= 0x116199999999;
-}
+    HM_4CH::HM_4CH(uint64_t serial)
+        : HM_Abstract(serial) {};
 
-String HM_4CH::typeName()
-{
-    return String(F("HM-1200, HM-1500"));
-}
+    bool HM_4CH::isValidSerial(uint64_t serial)
+    {
+        return serial >= 0x116100000000 && serial <= 0x116199999999;
+    }
 
-const hm_byteAssign_t* HM_4CH::getByteAssignment()
-{
-    return byteAssignment;
-}
+    String HM_4CH::typeName()
+    {
+        return String(F("HM-1200, HM-1500"));
+    }
 
-const uint8_t HM_4CH::getAssignmentCount()
-{
-    return sizeof(byteAssignment) / sizeof(hm_byteAssign_t);
+    const hm_byteAssign_t* HM_4CH::getByteAssignment()
+    {
+        return byteAssignment;
+    }
+
+    const uint8_t HM_4CH::getAssignmentCount()
+    {
+        return sizeof(byteAssignment) / sizeof(hm_byteAssign_t);
+    }
 }

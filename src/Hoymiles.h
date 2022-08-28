@@ -7,32 +7,35 @@
 #include <memory>
 #include <vector>
 
-class HoymilesClass {
-public:
-    void init();
-    void loop();
+namespace Hoymiles
+{
+    class HoymilesClass {
+    public:
+        void init();
+        void loop();
 
-    std::shared_ptr<InverterAbstract> addInverter(const char* name, uint64_t serial);
-    std::shared_ptr<InverterAbstract> getInverterByPos(uint8_t pos);
-    std::shared_ptr<InverterAbstract> getInverterBySerial(uint64_t serial);
-    std::shared_ptr<InverterAbstract> getInverterByFragment(hm_fragment_t* fragment);
-    void removeInverterByPos(uint8_t pos);
-    void removeInverterBySerial(uint64_t serial);
-    size_t getNumInverters();
+        std::shared_ptr<InverterAbstract> addInverter(const char* name, uint64_t serial);
+        std::shared_ptr<InverterAbstract> getInverterByPos(uint8_t pos);
+        std::shared_ptr<InverterAbstract> getInverterBySerial(uint64_t serial);
+        std::shared_ptr<InverterAbstract> getInverterByFragment(hm_fragment_t* fragment);
+        void removeInverterByPos(uint8_t pos);
+        void removeInverterBySerial(uint64_t serial);
+        size_t getNumInverters();
 
-    HoymilesRadio* getRadio();
+        HoymilesRadio* getRadio();
 
-    uint32_t PollInterval();
-    void setPollInterval(uint32_t interval);
+        uint32_t PollInterval();
+        void setPollInterval(uint32_t interval);
 
-private:
-    std::vector<std::shared_ptr<InverterAbstract>> _inverters;
-    std::unique_ptr<HoymilesRadio> _radio;
+    private:
+        std::vector<std::shared_ptr<InverterAbstract>> _inverters;
+        std::unique_ptr<HoymilesRadio> _radio;
 
-    uint32_t _pollInterval;
-    uint32_t _lastPoll = 0;
-};
+        uint32_t _pollInterval;
+        uint32_t _lastPoll = 0;
+    };
 
-extern HoymilesClass Hoymiles;
+    extern HoymilesClass Hoymiles;
+}
 
 #endif // __Hoymiles_H__

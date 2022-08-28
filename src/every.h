@@ -1,6 +1,8 @@
 #ifndef __HM_every_H__
 #define __HM_every_H__
 
+namespace Hoymiles
+{
 #define LIB8STATIC __attribute__((unused)) static inline
 #define GET_MILLIS millis
 
@@ -141,5 +143,7 @@ INSTANTIATE_EVERY_N_TIME_PERIODS(CEveryNHours, uint8_t, hours8);
 #define EVERY_N_HOURS_I(NAME, N) \
     static CEveryNHours NAME(N); \
     if (NAME)
+
+}
 
 #endif // __HM_every_H__

@@ -3,103 +3,106 @@
 #include <string.h>
 #include <Arduino.h>
 
-CommandAbstract::CommandAbstract(uint64_t target_address, uint64_t router_address)
+namespace Hoymiles
 {
-    memset(_payload, 0, RF_LEN);
-    _payload_size = 0;
+    CommandAbstract::CommandAbstract(uint64_t target_address, uint64_t router_address)
+    {
+        memset(_payload, 0, RF_LEN);
+        _payload_size = 0;
 
-    setTargetAddress(target_address);
-    setRouterAddress(router_address);
-    setSendCount(0);
-    setTimeout(0);
-}
-
-template <typename T>
-bool CommandAbstract::isA()
-{
-    return dynamic_cast<T*>(this) != NULL;
-}
-
-const uint8_t* CommandAbstract::getDataPayload()
-{
-    _payload[_payload_size] = hm_crc8(_payload, _payload_size);
-    return _payload;
-}
-
-void CommandAbstract::dumpDataPayload()
-{
-    if (HM_SERIAL_LOG_LEVEL == HM_LOG_VERBOSE) {
-        const uint8_t* payload = getDataPayload();
-        for (uint8_t i = 0; i < getDataSize(); i++) {
-            Serial.print(payload[i], HEX);
-            Serial.print(" ");
-        }
-        Serial.println("");
+        setTargetAddress(target_address);
+        setRouterAddress(router_address);
+        setSendCount(0);
+        setTimeout(0);
     }
-}
 
-uint8_t CommandAbstract::getDataSize()
-{
-    return _payload_size + 1; // Original payload plus crc8
-}
+    template <typename T>
+    bool CommandAbstract::isA()
+    {
+        return dynamic_cast<T*>(this) != NULL;
+    }
 
-void CommandAbstract::setTargetAddress(uint64_t address)
-{
-    convertSerialToPacketId(&_payload[1], address);
-    _targetAddress = address;
-}
-const uint64_t CommandAbstract::getTargetAddress()
-{
-    return _targetAddress;
-}
+    const uint8_t* CommandAbstract::getDataPayload()
+    {
+        _payload[_payload_size] = hm_crc8(_payload, _payload_size);
+        return _payload;
+    }
 
-void CommandAbstract::setRouterAddress(uint64_t address)
-{
-    convertSerialToPacketId(&_payload[5], address);
-    _routerAddress = address;
-}
+    void CommandAbstract::dumpDataPayload()
+    {
+        if (HM_SERIAL_LOG_LEVEL == HM_LOG_VERBOSE) {
+            const uint8_t* payload = getDataPayload();
+            for (uint8_t i = 0; i < getDataSize(); i++) {
+                Serial.print(payload[i], HEX);
+                Serial.print(" ");
+            }
+            Serial.println("");
+        }
+    }
 
-const uint64_t CommandAbstract::getRouterAddress()
-{
-    return _routerAddress;
-}
+    uint8_t CommandAbstract::getDataSize()
+    {
+        return _payload_size + 1; // Original payload plus crc8
+    }
 
-void CommandAbstract::setTimeout(uint32_t timeout)
-{
-    _timeout = timeout;
-}
+    void CommandAbstract::setTargetAddress(uint64_t address)
+    {
+        convertSerialToPacketId(&_payload[1], address);
+        _targetAddress = address;
+    }
+    const uint64_t CommandAbstract::getTargetAddress()
+    {
+        return _targetAddress;
+    }
 
-uint32_t CommandAbstract::getTimeout()
-{
-    return _timeout;
-}
+    void CommandAbstract::setRouterAddress(uint64_t address)
+    {
+        convertSerialToPacketId(&_payload[5], address);
+        _routerAddress = address;
+    }
 
-void CommandAbstract::setSendCount(uint8_t count)
-{
-    _sendCount = count;
-}
+    const uint64_t CommandAbstract::getRouterAddress()
+    {
+        return _routerAddress;
+    }
 
-uint8_t CommandAbstract::getSendCount()
-{
-    return _sendCount;
-}
+    void CommandAbstract::setTimeout(uint32_t timeout)
+    {
+        _timeout = timeout;
+    }
 
-uint8_t CommandAbstract::incrementSendCount()
-{
-    return _sendCount++;
-}
+    uint32_t CommandAbstract::getTimeout()
+    {
+        return _timeout;
+    }
 
-CommandAbstract* CommandAbstract::getRequestFrameCommand(uint8_t frame_no)
-{
-    return nullptr;
-}
+    void CommandAbstract::setSendCount(uint8_t count)
+    {
+        _sendCount = count;
+    }
 
-void CommandAbstract::convertSerialToPacketId(uint8_t buffer[], uint64_t serial)
-{
-    hm_serial_u s;
-    s.u64 = serial;
-    buffer[3] = s.b[0];
-    buffer[2] = s.b[1];
-    buffer[1] = s.b[2];
-    buffer[0] = s.b[3];
+    uint8_t CommandAbstract::getSendCount()
+    {
+        return _sendCount;
+    }
+
+    uint8_t CommandAbstract::incrementSendCount()
+    {
+        return _sendCount++;
+    }
+
+    CommandAbstract* CommandAbstract::getRequestFrameCommand(uint8_t frame_no)
+    {
+        return nullptr;
+    }
+
+    void CommandAbstract::convertSerialToPacketId(uint8_t buffer[], uint64_t serial)
+    {
+        hm_serial_u s;
+        s.u64 = serial;
+        buffer[3] = s.b[0];
+        buffer[2] = s.b[1];
+        buffer[1] = s.b[2];
+        buffer[0] = s.b[3];
+    }
 }
