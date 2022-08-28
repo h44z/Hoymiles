@@ -17,13 +17,13 @@ void setup() {
     Serial.println(F("Starting SimpleDTU..."));
 
     Serial.println(F("Initialize Hoymiles interface... "));
-    Hoymiles.init();
+    Hoymiles::Hoymiles.init();
 
-    Hoymiles.getRadio()->setPALevel(RF24_PA_HIGH);
-    Hoymiles.getRadio()->setDtuSerial(0x99978563412);
-    Hoymiles.setPollInterval(5);
+    Hoymiles::Hoymiles.getRadio()->setPALevel(RF24_PA_HIGH);
+    Hoymiles::Hoymiles.getRadio()->setDtuSerial(0x99978563412);
+    Hoymiles::Hoymiles.setPollInterval(5);
 
-    auto inv = Hoymiles.addInverter("HM-300", 0x121112345678); // serial is 121112345678
+    auto inv = Hoymiles::Hoymiles.addInverter("HM-300", 0x121112345678); // serial is 121112345678
     if (inv != nullptr) {
         inv->Statistics()->setChannelMaxPower(0, 385); // channel 0 has 385W
     } else {
@@ -35,7 +35,7 @@ void setup() {
 }
 
 
-void printField(std::shared_ptr<InverterAbstract> inv, uint8_t channel, uint8_t fieldId) {
+void printField(std::shared_ptr<Hoymiles::InverterAbstract> inv, uint8_t channel, uint8_t fieldId) {
     Serial.print("  - ");
     Serial.print(hm_fields[fieldId]);
     Serial.print(" : ");
@@ -47,14 +47,14 @@ void printField(std::shared_ptr<InverterAbstract> inv, uint8_t channel, uint8_t 
 
 //-----------------------------------------------------------------------------
 void loop() {
-    Hoymiles.loop();
+    Hoymiles::Hoymiles.loop();
 
     unsigned long currentMillis = millis();
 
     if (currentMillis - previousMillis > interval) {
         previousMillis = currentMillis;
 
-        auto inv = Hoymiles.getInverterByPos(0);
+        auto inv = Hoymiles::Hoymiles.getInverterByPos(0);
         Serial.print("INVERTER STATS: ");
         Serial.print(inv->name());
         Serial.print("(last contact: ");
@@ -66,31 +66,31 @@ void loop() {
             Serial.println(c);
 
             Serial.println(" - DC Stats");
-            printField(inv, c, HM_FLD_PDC);
+            printField(inv, c, Hoymiles::HM_FLD_PDC);
             if (c > 0) { // only DC channels
-                printField(inv, c, HM_FLD_UDC);
-                printField(inv, c, HM_FLD_IDC);
+                printField(inv, c, Hoymiles::HM_FLD_UDC);
+                printField(inv, c, Hoymiles::HM_FLD_IDC);
             }
 
             if (c == 0) { // only AC channel
                 Serial.println(" - AC Stats");
-                printField(inv, c, HM_FLD_PAC);
-                printField(inv, c, HM_FLD_UAC);
-                printField(inv, c, HM_FLD_IAC);
+                printField(inv, c, Hoymiles::HM_FLD_PAC);
+                printField(inv, c, Hoymiles::HM_FLD_UAC);
+                printField(inv, c, Hoymiles::HM_FLD_IAC);
             }
 
             Serial.println(" - Other");
-            printField(inv, c, HM_FLD_YD);
-            printField(inv, c, HM_FLD_YT);
+            printField(inv, c, Hoymiles::HM_FLD_YD);
+            printField(inv, c, Hoymiles::HM_FLD_YT);
             if (c == 0) {
-                printField(inv, c, HM_FLD_F);
-                printField(inv, c, HM_FLD_T);
-                printField(inv, c, HM_FLD_EFF);
+                printField(inv, c, Hoymiles::HM_FLD_F);
+                printField(inv, c, Hoymiles::HM_FLD_T);
+                printField(inv, c, Hoymiles::HM_FLD_EFF);
             }
-            printField(inv, c, HM_FLD_PCT);
-            printField(inv, c, HM_FLD_PRA);
+            printField(inv, c, Hoymiles::HM_FLD_PCT);
+            printField(inv, c, Hoymiles::HM_FLD_PRA);
             if (c > 0) {
-                printField(inv, c, HM_FLD_IRR);
+                printField(inv, c, Hoymiles::HM_FLD_IRR);
             }
         }
     }

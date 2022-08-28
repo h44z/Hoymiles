@@ -86,18 +86,18 @@ class HoymilesDTU : public Component {
 
   void setup() override {
     ESP_LOGI("hoymiles", "Setting up hoymiles DTU with %d inverters", this->_inverters.size());
-    Hoymiles.init();
+    Hoymiles::Hoymiles.init();
 
-    Hoymiles.getRadio()->setPALevel(dtu_transmission_power);
-    Hoymiles.getRadio()->setDtuSerial(dtu_serial);
-    Hoymiles.setPollInterval(5);
+    Hoymiles::Hoymiles.getRadio()->setPALevel(dtu_transmission_power);
+    Hoymiles::Hoymiles.getRadio()->setDtuSerial(dtu_serial);
+    Hoymiles::Hoymiles.setPollInterval(5);
 
     for (int i = 0; i < _inverters.size(); i++) {
       auto cfg = _inverters[i];
 
       ESP_LOGI("hoymiles", "Setting up inverter %d (%s)", i, cfg.name);
 
-      auto inv = Hoymiles.addInverter(cfg.name, cfg.serial);
+      auto inv = Hoymiles::Hoymiles.addInverter(cfg.name, cfg.serial);
       if (inv != nullptr) {
         for (int s = 0; s < cfg.strings.size(); s++) {
           inv->Statistics()->setChannelMaxPower(s, cfg.strings[s]);
@@ -107,17 +107,17 @@ class HoymilesDTU : public Component {
       }
     }
 
-    ESP_LOGI("hoymiles", "Setup finished for %d inverters", Hoymiles.getNumInverters());
+    ESP_LOGI("hoymiles", "Setup finished for %d inverters", Hoymiles::Hoymiles.getNumInverters());
   }
 
   void loop() override {
-    Hoymiles.loop();
+    Hoymiles::Hoymiles.loop();
 
     if(millis() - last_millis > INTERVAL) {
       Serial.println(millis());
       time_t now =  homeassistant_time->timestamp_now();
       ESP_LOGD("hoymiles", "Current time: %d", now);
-      auto inv = Hoymiles.getInverterByPos(this->_currentInverterIndex);
+      auto inv = Hoymiles::Hoymiles.getInverterByPos(this->_currentInverterIndex);
       if (inv == nullptr) {
         ESP_LOGE("hoymiles", "Inverter %d not ready/found!", this->_currentInverterIndex);
         return;
@@ -126,7 +126,7 @@ class HoymilesDTU : public Component {
       ESP_LOGD("hoymiles", "Publishing inverter %d (%s)", this->_currentInverterIndex, inv->name());
 
 
-      ESP_LOGD("hoymiles", "Last request %ul, last response %ul, last stats %ul", inv->lastRequest(), inv->lastResponse(), inv->Statistics()->getLastUpdate());
+      ESP_LOGD("hoymiles", "Last request %d, last response %d, last stats %d", inv->lastRequest(), inv->lastResponse(), inv->Statistics()->getLastUpdate());
       Serial.println(inv->lastRequest());
 
       auto is_online = true;// inv->online();
@@ -159,7 +159,7 @@ class HoymilesDTU : public Component {
 
       ESP_LOGD("hoymiles", "Published inverter %d (%s)", this->_currentInverterIndex, inv->name());
 
-      if (++this->_currentInverterIndex >= Hoymiles.getNumInverters()) {
+      if (++this->_currentInverterIndex >= Hoymiles::Hoymiles.getNumInverters()) {
         this->_currentInverterIndex = 0;
       }
 

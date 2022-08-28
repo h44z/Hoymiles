@@ -30,6 +30,11 @@ wifi:
 
 captive_portal:
 
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    timezone: Europe/Vienna
+
 # define the DTU instance, here we define one with id 'hoymilesDTU'
 custom_component:
   - id: hoymilesDTU
@@ -45,16 +50,16 @@ custom_component:
 sensor:
 - platform: custom
   lambda: |-
-    return {hm_sensor(hoymilesDTU, 0, 0, HM_FLD_PDC), // component id, inverter index (see config order), inverter output channel (0 = AC, 1 = first DC channel), inverter field
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_PAC),
-            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_UDC),
-            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_IDC),
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_UAC),
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_IAC),
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_F),
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_T),
-            hm_sensor(hoymilesDTU, 0, 0, HM_FLD_EFF),
-            hm_sensor(hoymilesDTU, 0, 1, HM_FLD_IRR)}; 
+    return {hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_PDC), // component id, inverter index (see config order), inverter output channel (0 = AC, 1 = first DC channel), inverter field
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_PAC),
+            hm_sensor(hoymilesDTU, 0, 1, Hoymiles::HM_FLD_UDC),
+            hm_sensor(hoymilesDTU, 0, 1, Hoymiles::HM_FLD_IDC),
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_UAC),
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_IAC),
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_F),
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_T),
+            hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_EFF),
+            hm_sensor(hoymilesDTU, 0, 1, Hoymiles::HM_FLD_IRR)}; 
 
   sensors:
     - name: "DC Power Input"
