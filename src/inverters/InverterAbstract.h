@@ -12,7 +12,7 @@
 namespace Hoymiles
 {
     #define HM_MAX_NAME_LENGTH 32
-    #define HM_OFFLINE_TRESHOLD 1000 // milliseconds
+    #define HM_OFFLINE_TRESHOLD 5000 // milliseconds
 
     enum {
         HM_FRAGMENT_ALL_MISSING = 255,
