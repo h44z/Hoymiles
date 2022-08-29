@@ -59,7 +59,8 @@ sensor:
             hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_F),
             hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_T),
             hm_sensor(hoymilesDTU, 0, 0, Hoymiles::HM_FLD_EFF),
-            hm_sensor(hoymilesDTU, 0, 1, Hoymiles::HM_FLD_IRR)}; 
+            hm_sensor(hoymilesDTU, 0, 1, Hoymiles::HM_FLD_IRR),
+            hm_sensor(hoymilesDTU, 0, 0, LAST_RESPONSE)}; 
 
   sensors:
     - name: "DC Power Input"
@@ -99,6 +100,8 @@ sensor:
       accuracy_decimals: 2
     - name: "Irradiation on Panel 1"
       unit_of_measurement: "%"
+      accuracy_decimals: 2
+    - name: "Last Response"
       accuracy_decimals: 2
 
 # define binary inverter sensors

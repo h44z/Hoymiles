@@ -8,6 +8,8 @@
 #define hm_sensor(compId, inv, channel, field) get_hm(compId)->get_sensor(inv, channel, field)
 #define hm_status_sensor(compId, inv) get_hm(compId)->get_status_sensor(inv)
 
+#define LAST_RESPONSE 255
+
 typedef struct {
   uint64_t serial;                // Inverter serial (add a 0x infront)
   const char* name;               // Inverter name
@@ -61,8 +63,8 @@ class HoymilesSensor : public Sensor {
 class HoymilesDTU : public Component {
  private:
     // DTU config
-    uint64_t dtu_serial = 0x99978563412;                 // Serial of the DTU (simply keep it as it is^^)
-    rf24_pa_dbm_e dtu_transmission_power = RF24_PA_LOW;  // transmission power of the RF24 module
+    uint64_t dtu_serial = 0x99978563412;                  // Serial of the DTU (simply keep it as it is^^)
+    rf24_pa_dbm_e dtu_transmission_power = RF24_PA_HIGH;  // transmission power of the RF24 module
 
     // Inverter config
     std::vector<inverterConfig> _inverters;
@@ -140,8 +142,13 @@ class HoymilesDTU : public Component {
           if (s == NULL) {
             continue;
           }
-          auto val = inv->Statistics()->getChannelFieldValue(s->channel(), s->field());
-          s->publish_state(val);
+          if (s->field() == LAST_RESPONSE) {
+            auto val = inv->Statistics()->getLastUpdate();
+            s->publish_state(val);
+          } else {
+            auto val = inv->Statistics()->getChannelFieldValue(s->channel(), s->field());
+            s->publish_state(val);
+          }
         }
       } else if(!offline_update_sent){
         offline_update_sent = true;
