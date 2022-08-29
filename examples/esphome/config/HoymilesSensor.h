@@ -114,9 +114,8 @@ class HoymilesDTU : public Component {
     Hoymiles::Hoymiles.loop();
 
     if(millis() - last_millis > INTERVAL) {
-      Serial.println(millis());
       time_t now =  homeassistant_time->timestamp_now();
-      ESP_LOGD("hoymiles", "Current time: %d", now);
+      ESP_LOGV("hoymiles", "Current time: %d", now);
       auto inv = Hoymiles::Hoymiles.getInverterByPos(this->_currentInverterIndex);
       if (inv == nullptr) {
         ESP_LOGE("hoymiles", "Inverter %d not ready/found!", this->_currentInverterIndex);
@@ -125,9 +124,7 @@ class HoymilesDTU : public Component {
 
       ESP_LOGD("hoymiles", "Publishing inverter %d (%s)", this->_currentInverterIndex, inv->name());
 
-
-      ESP_LOGD("hoymiles", "Last request %d, last response %d, last stats %d", inv->lastRequest(), inv->lastResponse(), inv->Statistics()->getLastUpdate());
-      Serial.println(inv->lastRequest());
+      ESP_LOGV("hoymiles", "Last request %d, last response %d, last stats %d", inv->lastRequest(), inv->lastResponse(), inv->Statistics()->getLastUpdate());
 
       auto is_online = inv->online();
 
